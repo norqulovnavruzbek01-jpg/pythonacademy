@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyMaster UZ - Python Akademiyasi va Amaliy Loyihalar</title>
+<meta name="description" content="Python dasturlash tilini noldan boshlab o'rganish uchun interaktiv kurslar, jonli kod muharriri va amaliy loyihalar." />
+<meta property="og:title" content="PyMaster UZ - Python Akademiyasi va Amaliy Loyihalar" />
+<meta property="og:description" content="Python, HTML, CSS va JavaScript'ni interaktiv darslar va amaliy loyihalar orqali o'rganing." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>" />
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js" defer></script>
+<style>
+  :root{
+    --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0;
+    --em:#059669; --em-d:#047857; --em-l:#ecfdf5; --teal:#0d9488; --amber:#d97706;
+    --dark:#0f172a; --dark2:#1e293b; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  button,input,textarea,select{font:inherit}
+  button{cursor:pointer}
+  h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+  p{margin:0 0 1em}
+  .container{max-width:1180px;margin:0 auto;padding:0 20px;width:100%}
+  .narrow{max-width:860px;margin:0 auto;padding:0 20px;width:100%}
+  main{flex:1;padding:28px 0 60px}
+  [hidden]{display:none !important}
+
+  /* ---------- Header ---------- */
+  header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;white-space:nowrap}
+  .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--em),var(--teal));display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:0 6px 16px rgba(5,150,105,.3)}
+  .brand small{display:block;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.3px}
+  nav.menu{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;justify-content:center}
+  nav.menu::-webkit-scrollbar{display:none}
+  nav.menu a{padding:8px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#475569;white-space:nowrap;transition:.2s}
+  nav.menu a:hover{background:#f1f5f9;color:var(--text)}
+  nav.menu a.active{background:#e2e8f0;color:var(--text);font-weight:700}
+  .xp{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:10px;background:var(--em-l);border:1px solid #a7f3d0;color:#065f46;font-weight:700;font-size:13px;white-space:nowrap;cursor:pointer}
+
+  /* ---------- Shared UI ---------- */
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;border:0;background:var(--em);color:#fff;font-weight:600;font-size:14px;transition:.2s;box-shadow:0 4px 14px rgba(5,150,105,.25)}
+  .btn:hover{background:var(--em-d);transform:translateY(-1px)}
+  .btn:disabled{opacity:.55;cursor:default;transform:none}
+  .btn.dark{background:var(--dark2);box-shadow:none}
+  .btn.dark:hover{background:#334155}
+  .btn.ghost{background:#fff;color:var(--text);border:1px solid var(--border);box-shadow:none}
+  .btn.ghost:hover{background:#f8fafc}
+  .btn.sm{padding:7px 12px;font-size:13px;border-radius:9px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:.2s}
+  .card.click{cursor:pointer}
+  .card.click:hover{box-shadow:0 10px 25px rgba(15,23,42,.08);transform:translateY(-2px)}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--em-l);color:#047857}
+  .badge.b{background:#ccfbf1;color:#0f766e}
+  .badge.a{background:#fef3c7;color:#b45309}
+  .badge.r{background:#fee2e2;color:#b91c1c}
+  .muted{color:var(--muted)}
+  .section-title{text-align:center;max-width:680px;margin:0 auto 32px}
+  .section-title h2{font-size:clamp(24px,3vw,32px);margin-bottom:8px}
+  .grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .progress{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:12px}
+  .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--em),var(--teal));border-radius:999px;transition:width .4s}
+  .back{display:inline-flex;gap:6px;color:#475569;font-weight:600;font-size:14px;margin-bottom:16px}
+  .back:hover{color:var(--text)}
+  .page-head{margin-bottom:24px}
+  .page-head h1{font-size:clamp(26px,3.5vw,36px);margin-bottom:6px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .label{font-size:13px;font-weight:700;color:#334155;margin:18px 0 8px;display:block}
+  h3.sec{font-size:17px;margin:24px 0 10px}
+
+  pre.code,pre.output{background:var(--dark);color:#6ee7b7;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;padding:16px 18px;border-radius:12px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin:0}
+  pre.output{color:#e2e8f0;min-height:60px}
+  textarea.editor{width:100%;min-height:220px;resize:vertical;background:#0b1220;color:#a7f3d0;border:1px solid #1e293b;border-radius:12px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;outline:none;tab-size:4}
+  textarea.editor:focus{border-color:var(--em)}
+  textarea.area{width:100%;min-height:100px;border:1px solid var(--border);border-radius:12px;padding:12px;outline:none;background:#fff}
+  input.text{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;outline:none;background:#fff}
+  input.text:focus{border-color:var(--em);box-shadow:0 0 0 3px rgba(5,150,105,.15)}
+  iframe.preview{width:100%;height:340px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-top:12px}
+  .hint{margin-top:12px;padding:12px 14px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:14px}
+  .output-wrap{margin-top:12px}
+  .output-wrap .label{margin-top:0}
+
+  /* ---------- Hero ---------- */
+  .hero{margin:0 20px;border-radius:28px;background:radial-gradient(ellipse at top right,rgba(16,185,129,.25),transparent 60%),linear-gradient(180deg,var(--dark),#020617);color:#fff;padding:72px 24px 56px;text-align:center;box-shadow:0 25px 50px -12px rgba(15,23,42,.35)}
+  .hero-in{max-width:820px;margin:0 auto}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.35);color:#34d399;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .hero h1{font-size:clamp(34px,6vw,60px);font-weight:900;letter-spacing:-.02em;margin:22px 0 18px}
+  .grad{background:linear-gradient(90deg,#34d399,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{color:#cbd5e1;font-size:clamp(16px,2vw,19px);max-width:640px;margin:0 auto 30px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px;padding-top:32px;border-top:1px solid rgba(148,163,184,.2)}
+  .stats b{display:block;font-size:clamp(22px,3vw,32px);font-weight:800}
+  .stats span{font-size:12px;color:#94a3b8}
+  .c-em{color:#34d399}.c-teal{color:#2dd4bf}.c-cy{color:#22d3ee}.c-am{color:#fbbf24}
+  .feature{cursor:pointer}
+  .ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;margin-bottom:18px}
+  .promo{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#ecfdf5,#f0fdfa);border:1px solid #a7f3d0;border-radius:24px;padding:36px}
+  .promo h2{font-size:clamp(22px,3vw,30px);margin:12px 0}
+
+  /* ---------- Courses ---------- */
+  .mod-meta{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .mod-card h3{font-size:19px;margin-bottom:8px}
+  .lesson-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:10px;transition:.15s;cursor:pointer}
+  .lesson-row:hover{border-color:#6ee7b7;background:#f0fdf4}
+  .lesson-row .t{font-weight:600;font-size:15px}
+  .lesson-row .d{font-size:12px;color:var(--muted)}
+  .done{color:var(--em);font-weight:700;font-size:13px;white-space:nowrap}
+  .lesson-card h2{font-size:24px;margin-bottom:6px}
+  .lesson-card h3.sec{color:var(--text)}
+  .quiz-opt{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;cursor:pointer;background:#fff}
+  .quiz-opt:hover{border-color:#6ee7b7}
+  .quiz-opt input{accent-color:var(--em)}
+  .q-ok{color:var(--em);font-weight:700}
+  .q-bad{color:#dc2626;font-weight:700}
+
+  /* ---------- IDE ---------- */
+  .tabs{display:inline-flex;gap:4px;background:#f1f5f9;border:1px solid var(--border);padding:4px;border-radius:12px}
+  .tabs button{border:0;background:transparent;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px;color:#475569}
+  .tabs button.on{background:var(--em);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.25)}
+  .ide-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:860px){.ide-grid{grid-template-columns:1fr}}
+  .ide-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  select.sel{padding:9px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;outline:none}
+  .out-title{font-size:13px;font-weight:700;color:#475569;margin:0 0 8px}
+
+  /* ---------- Projects ---------- */
+  .proj h3{font-size:19px;margin:12px 0 8px}
+  .proj-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--em);font-weight:600;font-size:14px}
+  .diff-Oson{background:#dcfce7;color:#15803d}
+  .diff-O{background:#fef3c7;color:#b45309}
+  .diff-Q{background:#fee2e2;color:#b91c1c}
+  .checklist{list-style:none;padding:0;margin:0}
+  .checklist li{display:flex;gap:10px;align-items:center;padding:6px 0;color:#334155;font-size:15px}
+  .checklist li::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--em-l);color:var(--em);font-weight:800;font-size:12px;flex-shrink:0}
+  .steps{display:grid;gap:8px}
+  .steps div{padding:11px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:500}
+
+  /* ---------- AI / FAQ ---------- */
+  details.faq{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:12px}
+  details.faq summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  details.faq summary::after{content:"+";font-size:22px;color:var(--em);font-weight:500}
+  details.faq[open] summary::after{content:"−"}
+  details.faq p{margin:12px 0 0;color:#475569}
+
+  /* ---------- Profile ---------- */
+  .stat-box{text-align:center;padding:22px}
+  .stat-box b{display:block;font-size:30px;color:var(--em)}
+  .avatar{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--em),var(--teal));color:#fff;display:grid;place-items:center;font-size:28px;font-weight:800}
+
+  /* ---------- Modal ---------- */
+  .overlay{position:fixed;inset:0;z-index:100;background:rgba(2,6,23,.75);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
+  .modal{background:#fff;border-radius:24px;padding:32px;max-width:420px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+  .modal .ico-c{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--em),var(--teal));color:#fff;display:grid;place-items:center;font-size:26px;margin:0 auto 14px}
+
+  /* ---------- Toast ---------- */
+  #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:var(--dark);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .35s;z-index:200;max-width:90vw;text-align:center}
+  #toast.show{transform:translate(-50%,0)}
+
+  /* ---------- Footer ---------- */
+  footer{background:#fff;border-top:1px solid var(--border);padding:28px 0;margin-top:40px}
+  .foot{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+  .foot nav{display:flex;gap:18px;flex-wrap:wrap}
+  .foot a:hover{color:var(--text)}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .top-in{flex-wrap:wrap;gap:10px;padding:10px 16px}
+    nav.menu{order:3;width:100%;justify-content:flex-start}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .hero{margin:0 12px;padding:52px 18px 40px;border-radius:22px}
+  }
+  @media (max-width:520px){
+    .brand small{display:none}
+    .xp{padding:6px 9px;font-size:12px}
+    .card{padding:18px}
+    .promo{padding:24px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a href="#home" class="brand">
+      <span class="logo">🐍</span>
+      <span>PyMaster <span class="c-em">UZ</span><small>Python Akademiyasi</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#home" data-nav="home">Bosh sahifa</a>
+      <a href="#courses" data-nav="courses">📚 Kurslar</a>
+      <a href="#ide" data-nav="ide">💻 Jonli IDE</a>
+      <a href="#projects" data-nav="projects">🛠 Loyihalar</a>
+      <a href="#ustoz" data-nav="ustoz">✨ Savol-javob</a>
+    </nav>
+    <div class="row" style="gap:10px">
+      <div class="xp" id="xp-badge" onclick="location.hash='#profile'">🏆 <span id="xp-val">0</span> XP</div>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer>
+  <div class="foot">
+    <div>© 2026 PyMaster UZ. Yaratuvchi: <b style="color:var(--text)">Norqulov Navruzbek</b>. Barcha huquqlar himoyalangan.</div>
+    <nav>
+      <a href="#courses">Kurslar</a>
+      <a href="#ide">Jonli IDE</a>
+      <a href="#projects">Loyihalar</a>
+      <a href="#ustoz">Savol-javob</a>
+      <a href="#profile">Profil</a>
+    </nav>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<div id="modal-root"></div>
+
+<script>
+/* =========================================================
+   DATA
+   ========================================================= */
+const PY_TOPICS = [
+  "Python ga kirish va o'rnatish","Birinchi print() dasturi","O'zgaruvchilar va ma'lumot turlari",
+  "Sonlar va arifmetik amallar","Matnlar (Strings) va metodlar","Foydalanuvchidan ma'lumot olish (input)",
+  "Mantiqiy solishtiruvlar","If-elif-else shart operatorlari","And, or, not mantiqiy operatorlari",
+  "For sikli va range()","While sikli va cheksiz tsikllar","Break va continue operatorlari",
+  "Ro'yxatlar (Lists) asoslari","List metodlari va indekslash","Kortejlar (Tuples)",
+  "Lug'atlar (Dictionaries)","To'plamlar (Sets)","Funksiya yaratish (def)",
+  "Funksiya argumentlari va return","Lambda anonim funksiyalar","Global va lokal o'zgaruvchilar",
+  "Modullar va import","Math va random kutubxonalari","Xatoliklar bilan ishlash (Try-Except)",
+  "Fayllarni ochish va o'qish (open)","Faylga yozish va qo'shish","Klasslar va obyektlar (OOP)",
+  "OOP Vorislik (Inheritance)","JSON ma'lumotlar bilan ishlash","Amaliy yakuniy loyiha"
+];
+const HTML_TOPICS = [
+  "HTML nima va asosiy tushunchalar","HTML sahifa tuzilishi (DOCTYPE)","Sarlavhalar (h1-h6)",
+  "Paragraflar va matn formatlash","Rasmlar qo'shish (img)","Havolalar va giperhavolalar (a)",
+  "Ro'yxatlar (ul, ol, li)","Jadvallar yaratish (table, tr, td)","Forma va input elementlari",
+  "Matn maydonlari va textarea","Tugmalar (button) va turlari","Semantik teglar (header, footer)",
+  "Navigatsiya tegi (nav)","Bo'limlar (section, article)","Div va span konteynerlari",
+  "Audio va video elementlari","Iframe orqali sahifa ulash","Meta teglar va SEO asoslari",
+  "Favicon va sarlavha sozlamalari","HTML atributlari","ID va Class farqlari",
+  "Blok va inline elementlar","Forma validatsiyasi","SVG rasmlar bilan ishlash",
+  "Dastlabki veb sahifa yaratish","Aksessuarlik (Accessibility)","Global atributlar",
+  "Data atributlari","HTML5 yangi imkoniyatlari","Loyihani yakunlash"
+];
+const CSS_TOPICS = [
+  "CSS ga kirish va ulanish turlari","CSS selektorlari (Element, Class, ID)","Ranglar va o'lchov birliklari",
+  "Shriftlar va matn dizayni","CSS Box Model (Margin, Padding, Border)","Fon (Background) xossalari",
+  "Display xossasi (block, inline)","Position xossalari (relative, absolute)","Fixed va sticky joylashuv",
+  "Float va Clear","Flexbox asoslari (display: flex)","Flexbox yo'nalishi va o'qi",
+  "Flexbox justify va align","Flexbox wrap va gap","CSS Grid asoslari (display: grid)",
+  "Grid ustunlar va qatorlar","Grid Template Areas","CSS O'tishlar (Transitions)",
+  "CSS Transform (Rotate, Scale)","CSS Animatsiyalar (Keyframes)","Media Queries (Responsive)",
+  "Pseudo-classes (:hover, :focus)","Pseudo-elements (::before, ::after)","CSS Variables (O'zgaruvchilar)",
+  "Shadow (Soyalar: box-shadow, text-shadow)","Z-index va qatlamlar tartibi","Overflow xossalari",
+  "CSS Cursor va ko'rsatgichlar","Normalize va Reset CSS","Yakuniy CSS Portfolio Loyihasi"
+];
+const JS_TOPICS = [
+  "JavaScript ga kirish va konsol","O'zgaruvchilar (let, const, var)","Ma'lumot turlari (Primitivlar)",
+  "Arifmetik va solishtiruv amallari","Shart operatorlari (if-else)","Switch-case operatori",
+  "Ternary operator","Funksiyalar (Function Declaration)","Funksiya expression va arrow",
+  "Massivlar (Arrays) asoslari","Massiv metodlari (push, pop, map)","Massiv filter va reduce",
+  "Obyektlar (Objects) yaratish","Obyekt metodlari va this","For va While sikllari",
+  "For...of va For...in sikllari","DOM tushunchasi va tanlash","Elementlarni o'zgartirish (innerHTML)",
+  "CSS ni JS orqali boshqarish","Hodisalar (Event Listeners: click)","Input va klaviatura hodisalari",
+  "Forma ma'lumotlarini olish","Local Storage bilan ishlash","Asinxron JavaScript (Timeout)",
+  "Va'dalar (Promises) asoslari","Async / Await sintaksisi","Fetch API orqali ma'lumot olish",
+  "Xatoliklarni tutish (try...catch)","Array va Object destrukturizatsiya","Yakuniy JavaScript Dastur"
+];
+
+// Har bir modul darslari shu yerda avtomatik yaratiladi
+function makeLessons(prefix, topics, lang){
+  return topics.map((t, i) => {
+    const n = i + 1;
+    let code, solution, starter;
+    if (lang === 'python') {
+      code = `# ${t} bo'yicha namuna kod\ndef demo_${n}():\n    print("${t} darsi bajarildi!")\n\ndemo_${n}()`;
+      starter = `# ${t} uchun kod\n`;
+      solution = `print("${t} bajarildi")`;
+    } else if (lang === 'html') {
+      code = `<!-- ${t} bo'yicha namuna -->\n<section>\n  <h2>${t}</h2>\n  <p>Dars muvaffaqiyatli bajarildi!</p>\n</section>`;
+      starter = `<!-- ${t} uchun kod -->\n`;
+      solution = `<h2>${t}</h2>\n<p>Dars bajarildi</p>`;
+    } else if (lang === 'css') {
+      code = `/* ${t} bo'yicha namuna */\n.demo-${n} {\n  color: #059669;\n  padding: 16px;\n  border-radius: 12px;\n  background: #ecfdf5;\n}`;
+      starter = `/* ${t} uchun CSS */\n`;
+      solution = `.box {\n  color: #059669;\n  padding: 16px;\n}`;
+    } else {
+      code = `// ${t} bo'yicha namuna\nfunction demo${n}() {\n  console.log("${t} darsi bajarildi!");\n}\ndemo${n}();`;
+      starter = `// ${t} uchun kod\n`;
+      solution = `console.log("${t} bajarildi");`;
+    }
+    return {
+      id: `${prefix}-les-${n}`,
+      title: `${n}. ${t}`,
+      name: t,
+      duration: '20 daqiqa',
+      theory: `Ushbu darsda biz "${t}" mavzusini chuqur o'rganamiz. Dasturlashda bu tushuncha kodni optimallashtirish va samarali yechimlar topishda muhim ahamiyat kasb etadi.`,
+      code,
+      exercise: `"${t}" mavzusi bo'yicha amaliy vazifani bajaring va natijani pastdagi oynada ko'ring.`,
+      starter,
+      solution,
+      hint: lang === 'python' ? "print() yoki tegishli sintaksisdan foydalaning." :
+            lang === 'html' ? "Kerakli HTML tegini yozing va brauzerda natijasini ko'ring." :
+            lang === 'css' ? "Selektor va xossa-qiymat juftligini yozing." :
+            "console.log() yordamida natijani chiqaring."
+    };
+  });
+}
+
+const MODULES = [
+  {
+    id: 'mod-1', lang: 'python', title: "1-Modul: Python Asoslari va Sintaksis",
+    description: "Python olamiga xush kelibsiz! O'zgaruvchilar, ma'lumot turlari, konsol bilan ishlash va asosiy operatorlarni o'rganing.",
+    level: "Boshlang'ich", category: "Python", icon: '🐍',
+    lessons: makeLessons('py-1', PY_TOPICS, 'python'),
+    quiz: [{ question: "Python'da konsolga ma'lumot chiqarish uchun qaysi funksiya ishlatiladi?",
+      options: ["echo()", "print()", "write()", "console.log()"], correctIndex: 1,
+      explanation: "Python'da print() funksiyasi ishlatiladi." }]
+  },
+  {
+    id: 'mod-2', lang: 'html', title: "2-Modul: HTML Asoslari va Sahifa Tuzilishi",
+    description: "Veb-sahifalarning suyak qismi bo'lgan HTML tili: teglar, sarlavhalar, matnlar, rasmlar va havolalar.",
+    level: "Boshlang'ich", category: "HTML & CSS", icon: '🧱',
+    lessons: makeLessons('html-2', HTML_TOPICS, 'html'),
+    quiz: [{ question: "HTML qanday ma'noni anglatadi?",
+      options: ["HyperText Markup Language", "High Tech Modern Language", "Hyper Transfer Machine", "Home Tool Markup"], correctIndex: 0,
+      explanation: "HTML - HyperText Markup Language." }]
+  },
+  {
+    id: 'mod-3', lang: 'css', title: "3-Modul: CSS Stillar va Flexbox Layout",
+    description: "Veb-sahifalarga go'zallik kiritish: ranglar, shriftlar, CSS selektorlari, Flexbox va Grid joylashuvi.",
+    level: "O'rta", category: "HTML & CSS", icon: '🎨',
+    lessons: makeLessons('css-3', CSS_TOPICS, 'css'),
+    quiz: [{ question: "CSS ning to'liq nomi nima?",
+      options: ["Cascading Style Sheets", "Creative Style System", "Computer Style Syntax", "Colorful Style"], correctIndex: 0,
+      explanation: "CSS - Cascading Style Sheets." }]
+  },
+  {
+    id: 'mod-4', lang: 'js', title: "4-Modul: JavaScript Dasturlash Asoslari",
+    description: "Veb-sahifalarga jon kiritish: o'zgaruvchilar, funksiyalar, shartlar, sikllar va DOM manipulyatsiyasi.",
+    level: "O'rta", category: "JavaScript", icon: '⚡',
+    lessons: makeLessons('js-4', JS_TOPICS, 'js'),
+    quiz: [{ question: "JavaScript da funksiya e'lon qilish uchun qaysi kalit so'z ishlatiladi?",
+      options: ["func", "function", "def", "method"], correctIndex: 1,
+      explanation: "JavaScript da function kalit so'zi ishlatiladi." }]
+  }
+];
+
+const PROJECTS = [
+  {
+    id: 'proj-1', lang: 'python', title: "Parol Generatori (Python)", difficulty: "Oson", category: "Python",
+    description: "Xavfsiz tasodifiy parollar yaratuvchi konsol dasturi.",
+    objectives: ["random moduli", "string moduli", "funksiyalar"],
+    starterCode: `import random\nimport string\n\ndef parol_yarat(uzunlik=8):\n    pass\n\nprint(parol_yarat(10))`,
+    solutionCode: `import random\nimport string\n\ndef parol_yarat(uzunlik=10):\n    belgilar = string.ascii_letters + string.digits\n    return "".join(random.choice(belgilar) for _ in range(uzunlik))\n\nprint(parol_yarat(10))`,
+    steps: ["1. Modullarni import qiling", "2. Belgilarni birlashtiring", "3. Generatsiya qiling"]
+  },
+  {
+    id: 'proj-2', lang: 'html', title: "Shaxsiy Portfolio Sayti (HTML & CSS)", difficulty: "O'rta", category: "HTML & CSS",
+    description: "Flexbox va zamonaviy dizayn yordamida shaxsiy portfolio veb-sahifasini yaratish.",
+    objectives: ["Semantik HTML", "Flexbox joylashuv", "Chiroyli ranglar"],
+    starterCode: `<!DOCTYPE html>\n<html lang="uz">\n  <head>\n    <meta charset="UTF-8">\n    <title>Mening Portfolim</title>\n  </head>\n  <body>\n    <!-- Portfolio tuzilmasi -->\n  </body>\n</html>`,
+    solutionCode: `<!DOCTYPE html>\n<html lang="uz">\n  <head>\n    <meta charset="UTF-8">\n    <title>Mening Portfolim</title>\n    <style>\n      body { font-family: sans-serif; margin: 0; background: #0f172a; color: white; }\n      header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #1e293b; }\n      .hero { text-align: center; padding: 80px 20px; }\n      .btn { background: #059669; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; }\n    </style>\n  </head>\n  <body>\n    <header>\n      <h2>DevPortfolio</h2>\n      <nav><a href="#" style="color:white; text-decoration:none;">Aloqa</a></nav>\n    </header>\n    <div class="hero">\n      <h1>Salom, Men Dasturchiman</h1>\n      <p>HTML, CSS va Python mutaxassisi</p>\n      <a href="#" class="btn">Bog'lanish</a>\n    </div>\n  </body>\n</html>`,
+    steps: ["1. Header yaratish", "2. Hero bo'limi", "3. CSS stillar berish"]
+  },
+  {
+    id: 'proj-3', lang: 'js', title: "Interaktiv Kalkulyator (JavaScript)", difficulty: "O'rta", category: "JavaScript",
+    description: "Funksiyalar va shartlar yordamida ishlaydigan oddiy kalkulyator mantiqini yozish.",
+    objectives: ["Funksiya yaratish", "switch / if shartlari", "Matematik amallar"],
+    starterCode: `// JavaScript kalkulyator\nfunction hisobla(a, amal, b) {\n  // Bu yerga kodingizni yozing\n}\n\nconsole.log(hisobla(5, "+", 5));`,
+    solutionCode: `function hisobla(a, amal, b) {\n  switch (amal) {\n    case "+": return a + b;\n    case "-": return a - b;\n    case "*": return a * b;\n    case "/": return b === 0 ? "Nolga bo'lish mumkin emas" : a / b;\n    default: return "Noma'lum amal";\n  }\n}\n\nconsole.log("Natija:", hisobla(5, "+", 5));`,
+    steps: ["1. Funksiya parametrlarini belgilang", "2. Har bir amal uchun shart yozing", "3. Natijani chiqaring"]
+  }
+];
+
+/* =========================================================
+   STATE & STORAGE
+   ========================================================= */
+const KEYS = { user: 'pymaster_user', xp: 'pymaster_xp', lessons: 'pymaster_lessons', projects: 'pymaster_projects' };
+function loadKey(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
+const state = {
+  user: loadKey(KEYS.user, null),
+  xp: loadKey(KEYS.xp, 0),
+  lessons: loadKey(KEYS.lessons, []),
+  projects: loadKey(KEYS.projects, [])
+};
+function persist() {
+  try {
+    localStorage.setItem(KEYS.user, JSON.stringify(state.user));
+    localStorage.setItem(KEYS.xp, JSON.stringify(state.xp));
+    localStorage.setItem(KEYS.lessons, JSON.stringify(state.lessons));
+    localStorage.setItem(KEYS.projects, JSON.stringify(state.projects));
+  } catch (e) { /* localStorage mavjud bo'lmasa, sayt ishlashda davom etadi */ }
+  document.getElementById('xp-val').textContent = state.xp;
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = id => document.getElementById(id);
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function copyText(text) {
+  const done = () => toast('Kod nusxalandi');
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done).catch(() => toast('Nusxalab bo\'lmadi'));
+  else toast('Nusxalab bo\'lmadi');
+}
+function levelOf(xp) { return Math.floor(xp / 500) + 1; }
+function modProgress(mod) {
+  const done = mod.lessons.filter(l => state.lessons.includes(l.id)).length;
+  return { done, total: mod.lessons.length, pct: Math.round(done / mod.lessons.length * 100) };
+}
+function totalLessons() { return MODULES.reduce((s, m) => s + m.lessons.length, 0); }
+
+/* =========================================================
+   CODE RUNNERS (Python: Pyodide, JS: sandbox, HTML/CSS: iframe)
+   ========================================================= */
+let pyPromise = null;
+function getPy() {
+  if (!pyPromise) {
+    pyPromise = (async () => {
+      if (!window.loadPyodide) throw new Error("Python muhiti yuklanmadi. Internet aloqasini tekshiring.");
+      const py = await window.loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" });
+      return py;
+    })();
+    pyPromise.catch(() => { pyPromise = null; });
+  }
+  return pyPromise;
+}
+async function runPython(code) {
+  const py = await getPy();
+  py.runPython("import sys, io\nsys.stdout = io.StringIO()\nsys.stderr = sys.stdout");
+  let err = '';
+  try { await py.runPythonAsync(code); }
+  catch (e) { err = String(e.message || e).trim().split('\n').slice(-3).join('\n'); }
+  const out = py.runPython("sys.stdout.getvalue()");
+  return (out + (err ? (out ? '\n' : '') + 'Xatolik:\n' + err : '')) || "Kod bajarildi (chiqish yo'q).";
+}
+function runJS(code) {
+  const logs = [];
+  const orig = console.log;
+  console.log = (...a) => logs.push(a.map(x => typeof x === 'object' ? JSON.stringify(x) : String(x)).join(' '));
+  try { new Function(code)(); }
+  catch (e) { logs.push('Xatolik: ' + e.message); }
+  finally { console.log = orig; }
+  return logs.join('\n') || "Kod bajarildi (chiqish yo'q).";
+}
+async function execCode(lang, code, outId, frameId) {
+  const out = $(outId), frame = frameId ? $(frameId) : null;
+  if (frame) { frame.hidden = true; frame.srcdoc = ''; }
+  out.hidden = false;
+  if (lang === 'html' || lang === 'css') {
+    out.hidden = true;
+    frame.hidden = false;
+    frame.srcdoc = lang === 'css'
+      ? `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${code}</style></head><body style="font-family:sans-serif;padding:20px"><div class="box demo-1">Salom, CSS!</div><h2>Sarlavha</h2><p>Paragraf matni</p><button>Tugma</button></body></html>`
+      : code;
+    return;
+  }
+  if (lang === 'python') {
+    out.textContent = 'Python muhiti yuklanmoqda (birinchi marta biroz vaqt oladi)...';
+    try { out.textContent = await runPython(code); }
+    catch (e) { out.textContent = 'Xatolik: ' + e.message; }
+    return;
+  }
+  out.textContent = runJS(code);
+}
+
+/* =========================================================
+   VIEWS
+   ========================================================= */
+function homeView() {
+  const lessonsDone = state.lessons.length;
+  return `
+  <section class="hero">
+    <div class="hero-in">
+      <span class="pill">✦ O'zbek tilidagi Python akademiyasi</span>
+      <h1>Python dasturlashni <span class="grad">noldan professionalgacha</span> o'rganing</h1>
+      <p class="lead">Interaktiv darslar, brauzerdagi jonli Python IDE va real amaliy loyihalar yordamida dasturlashni tez va oson o'zlashtiring.</p>
+      <div class="row" style="justify-content:center">
+        <a class="btn" href="#courses">Kurslarni boshlash →</a>
+        <a class="btn dark" href="#ide" style="border:1px solid #334155">💻 Jonli kod muharriri</a>
+      </div>
+      <div class="stats">
+        <div><b class="c-em">${MODULES.length} ta</b><span>Modul</span></div>
+        <div><b class="c-teal">${totalLessons()}</b><span>Interaktiv dars</span></div>
+        <div><b class="c-cy">${PROJECTS.length}</b><span>Amaliy loyiha</span></div>
+        <div><b class="c-am">100%</b><span>Brauzerda amaliyot</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="margin-top:72px">
+    <div class="section-title">
+      <h2>Nima uchun PyMaster UZ?</h2>
+      <p class="muted">Dasturlashni o'rganishni oson va qiziqarli qiluvchi barcha vositalar bir joyda.</p>
+    </div>
+    <div class="grid">
+      <div class="card click feature" onclick="location.hash='#courses'">
+        <div class="ico" style="background:#ecfdf5">📚</div>
+        <h3>Bosqichma-bosqich kurslar</h3>
+        <p class="muted">Python, HTML, CSS va JavaScript asoslaridan tortib OOP va JSON'gacha. Har bir dars oxirida test va amaliy mashq.</p>
+        <span style="color:var(--em);font-weight:600;font-size:14px">Kurslarni ko'rish →</span>
+      </div>
+      <div class="card click feature" onclick="location.hash='#ide'">
+        <div class="ico" style="background:#f0fdfa">🖥️</div>
+        <h3>Brauzerdagi jonli IDE</h3>
+        <p class="muted">Hech narsa o'rnatmasdan Python, HTML/CSS va JavaScript kodlarini yozing va natijasini darhol ko'ring.</p>
+        <span style="color:var(--teal);font-weight:600;font-size:14px">Kodni sinab ko'rish →</span>
+      </div>
+      <div class="card click feature" onclick="location.hash='#ustoz'">
+        <div class="ico" style="background:#fffbeb">✨</div>
+        <h3>Ko'p so'raladigan savollar</h3>
+        <p class="muted">O'quv jarayoni, XP tizimi va boshlang'ichlar uchun tez-tez beriladigan savollarga javoblar.</p>
+        <span style="color:var(--amber);font-weight:600;font-size:14px">Savollarni ko'rish →</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="margin-top:56px">
+    <div class="promo">
+      <div style="max-width:520px">
+        <span class="badge b">⚡ Amaliy tajriba</span>
+        <h2>Haqiqiy loyihalar bilan portfelingizni boyiting</h2>
+        <p class="muted">Faqat nazariya emas! Parol generatori, portfolio sayt va kalkulyator kabi loyihalarni bajarib, amaliy ko'nikmalarni egallang.</p>
+        <a class="btn" href="#projects">Loyihalarni ko'rish</a>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));width:100%;max-width:420px">
+        <div class="card" style="text-align:center"><div style="font-size:28px">🔐</div><b>Parol generatori</b><div class="muted" style="font-size:13px">Xavfsiz kalitlar</div></div>
+        <div class="card" style="text-align:center"><div style="font-size:28px">🌐</div><b>Portfolio sayt</b><div class="muted" style="font-size:13px">HTML & CSS</div></div>
+      </div>
+    </div>
+  </section>
+  <p class="muted" style="text-align:center;margin-top:28px;font-size:13px">Sizning yakunlagan darslaringiz: <b>${lessonsDone}</b> / ${totalLessons()}</p>`;
+}
+
+function coursesView() {
+  return `
+  <div class="container">
+    <div class="page-head">
+      <h1>📚 Kurslar</h1>
+      <p class="muted">Modulni tanlang va darslarni ketma-ket bajaring. Har bir darsni yakunlaganingizda +50 XP olasiz.</p>
+    </div>
+    <div class="grid">
+      ${MODULES.map(m => {
+        const p = modProgress(m);
+        const lvlCls = m.level === "Boshlang'ich" ? 'badge' : 'badge a';
+        return `
+        <div class="card click mod-card" onclick="location.hash='#courses/${m.id}'">
+          <div class="mod-meta">
+            <span style="font-size:26px">${m.icon}</span>
+            <span class="${lvlCls}">${esc(m.level)}</span>
+            <span class="badge b">${esc(m.category)}</span>
+          </div>
+          <h3>${esc(m.title)}</h3>
+          <p class="muted" style="font-size:14px">${esc(m.description)}</p>
+          <div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)">
+            <span>${p.done} / ${p.total} dars</span><span>${p.pct}%</span>
+          </div>
+          <div class="progress"><span style="width:${p.pct}%"></span></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function moduleView(modId) {
+  const mod = MODULES.find(m => m.id === modId);
+  if (!mod) return notFound();
+  const p = modProgress(mod);
+  return `
+  <div class="container narrow">
+    <a class="back" href="#courses">← Barcha kurslar</a>
+    <div class="card" style="margin-bottom:22px">
+      <div class="mod-meta"><span style="font-size:26px">${mod.icon}</span><span class="badge">${esc(mod.level)}</span><span class="badge b">${esc(mod.category)}</span></div>
+      <h1 style="font-size:26px">${esc(mod.title)}</h1>
+      <p class="muted">${esc(mod.description)}</p>
+      <div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>${p.done} / ${p.total} dars tugatildi</span><span>${p.pct}%</span></div>
+      <div class="progress"><span style="width:${p.pct}%"></span></div>
+    </div>
+    ${mod.lessons.map((l, i) => {
+      const d = state.lessons.includes(l.id);
+      return `
+      <div class="lesson-row" onclick="location.hash='#courses/${mod.id}/${i}'">
+        <div>
+          <div class="t">${esc(l.title)}</div>
+          <div class="d">⏱ ${esc(l.duration)}</div>
+        </div>
+        ${d ? '<span class="done">✓ Tugatildi</span>' : '<span class="muted" style="font-size:20px">›</span>'}
+      </div>`;
+    }).join('')}
+    <div class="card" style="margin-top:24px;text-align:center">
+      <h3>🧠 Modul testi</h3>
+      <p class="muted" style="font-size:14px">Bilimingizni tekshiring.</p>
+      <a class="btn" href="#courses/${mod.id}/quiz">Testni boshlash</a>
+    </div>
+  </div>`;
+}
+
+function lessonView(modId, idx) {
+  const mod = MODULES.find(m => m.id === modId);
+  if (!mod || !mod.lessons[idx]) return notFound();
+  const les = mod.lessons[idx];
+  const done = state.lessons.includes(les.id);
+  const prev = idx > 0 ? `#courses/${mod.id}/${idx - 1}` : null;
+  const next = idx < mod.lessons.length - 1 ? `#courses/${mod.id}/${idx + 1}` : `#courses/${mod.id}/quiz`;
+  const runLang = mod.lang;
+  const isWeb = runLang === 'html' || runLang === 'css';
+  return `
+  <div class="container narrow">
+    <a class="back" href="#courses/${mod.id}">← ${esc(mod.title)}</a>
+    <div class="card lesson-card">
+      <div class="mod-meta">
+        <span class="badge b">${esc(mod.category)}</span>
+        <span class="muted" style="font-size:13px">⏱ ${esc(les.duration)}</span>
+        <span class="muted" style="font-size:13px">Dars ${idx + 1} / ${mod.lessons.length}</span>
+      </div>
+      <h2>${esc(les.title)}</h2>
+
+      <h3 class="sec">📖 Nazariya</h3>
+      <p>${esc(les.theory)}</p>
+
+      <h3 class="sec">💡 Namuna kod</h3>
+      <pre class="code">${esc(les.code)}</pre>
+
+      <h3 class="sec">✍️ Amaliy vazifa</h3>
+      <p>${esc(les.exercise)}</p>
+      <textarea id="ex-code" class="editor" spellcheck="false">${esc(les.starter)}</textarea>
+
+      <div class="btn-row">
+        <button class="btn" onclick="runExercise('${runLang}')">▶ Ishga tushirish</button>
+        <button class="btn ghost" onclick="$('hint').hidden=!$('hint').hidden">💡 Maslahat</button>
+        <button class="btn ghost" onclick="$('sol').hidden=!$('sol').hidden">👀 Yechimni ko'rish</button>
+        <button class="btn ghost" onclick="copyText($('ex-code').value)">📋 Nusxalash</button>
+      </div>
+
+      <div id="hint" class="hint" hidden>${esc(les.hint)}</div>
+      <div id="sol" hidden>
+        <h3 class="sec">✅ Yechim</h3>
+        <pre class="code">${esc(les.solution)}</pre>
+      </div>
+
+      <div class="output-wrap">
+        <p class="out-title">Natija</p>
+        <pre id="ex-out" class="output" ${isWeb ? 'hidden' : ''}>Kodni ishga tushiring...</pre>
+        <iframe id="ex-frame" class="preview" sandbox="allow-scripts" ${isWeb ? '' : 'hidden'}></iframe>
+      </div>
+
+      <div class="row" style="justify-content:space-between;margin-top:26px;padding-top:20px;border-top:1px solid var(--border)">
+        <div>${prev ? `<a class="btn ghost" href="${prev}">← Oldingi</a>` : ''}</div>
+        <div class="row">
+          <button id="done-btn" class="btn" ${done ? 'disabled' : ''} onclick="completeLesson('${mod.id}',${idx})">
+            ${done ? '✓ Tugatilgan' : '✓ Darsni yakunlash (+50 XP)'}
+          </button>
+          <a class="btn dark" href="${next}">Keyingisi →</a>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function quizView(modId) {
+  const mod = MODULES.find(m => m.id === modId);
+  if (!mod) return notFound();
+  return `
+  <div class="container narrow">
+    <a class="back" href="#courses/${mod.id}">← ${esc(mod.title)}</a>
+    <div class="card">
+      <h2>🧠 ${esc(mod.title)} — test</h2>
+      <p class="muted">Javobingizni tanlang va "Tekshirish" tugmasini bosing.</p>
+      <form id="quiz" onsubmit="event.preventDefault();checkQuiz('${mod.id}')">
+        ${mod.quiz.map((q, qi) => `
+          <div style="margin-top:22px">
+            <h3 style="font-size:17px">${qi + 1}. ${esc(q.question)}</h3>
+            ${q.options.map((o, oi) => `
+              <label class="quiz-opt">
+                <input type="radio" name="q${qi}" value="${oi}" required>
+                <span>${esc(o)}</span>
+              </label>`).join('')}
+            <div id="qr-${qi}" class="muted" style="font-size:14px;margin-top:6px"></div>
+          </div>`).join('')}
+        <div class="btn-row" style="margin-top:24px"><button class="btn" type="submit">Tekshirish</button></div>
+      </form>
+    </div>
+  </div>`;
+}
+
+function ideView() {
+  return `
+  <div class="container">
+    <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px">
+      <div>
+        <span class="badge b">Interaktiv veb va Python IDE</span>
+        <h1 style="margin-top:10px">Jonli kod muharriri</h1>
+        <p class="muted">Python, HTML/CSS yoki JavaScript kodini yozing va natijani darhol ko'ring.</p>
+      </div>
+      <div class="tabs">
+        <button id="tab-python" class="on" onclick="setIdeLang('python')">🐍 Python</button>
+        <button id="tab-web" onclick="setIdeLang('web')">🌐 HTML / CSS / JS</button>
+      </div>
+    </div>
+    <div class="ide-grid">
+      <div class="card">
+        <div class="ide-bar">
+          <select id="preset" class="sel" onchange="loadPreset()"></select>
+          <div class="row">
+            <button class="btn sm ghost" onclick="copyText($('ide-code').value)">📋 Nusxalash</button>
+            <button class="btn sm dark" onclick="$('ide-code').value=currentPresets()[0].code;loadPreset(true)">↺ Tozalash</button>
+            <button class="btn sm" onclick="runIde()">▶ Ishga tushirish</button>
+          </div>
+        </div>
+        <textarea id="ide-code" class="editor" style="min-height:360px" spellcheck="false"></textarea>
+      </div>
+      <div class="card">
+        <p class="out-title">Natija</p>
+        <pre id="ide-out" class="output" style="min-height:360px">Kodni ishga tushiring...</pre>
+        <iframe id="ide-frame" class="preview" style="height:360px" sandbox="allow-scripts" hidden></iframe>
+      </div>
+    </div>
+  </div>`;
+}
+
+const IDE_PRESETS = {
+  python: [
+    { name: "1. Salom dunyo", code: `print("Salom, PyMaster UZ!")\nism = "Python O'quvchisi"\nprint(f"Xush kelibsiz, {ism}!")` },
+    { name: "2. Fibonacci", code: `def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        print(a, end=" ")\n        a, b = b, a + b\n\nfib(10)` },
+    { name: "3. Ro'yxatlar", code: `sonlar = [3, 7, 1, 9, 4]\nprint("Eng katta:", max(sonlar))\nprint("Saralangan:", sorted(sonlar))\nprint("Juft sonlar:", [x for x in sonlar if x % 2 == 0])` }
+  ],
+  web: [
+    { name: "1. Salom sahifa", code: `<!DOCTYPE html>\n<html>\n  <head>\n    <style>\n      body { font-family: sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }\n      .card { background: #1e293b; padding: 30px; border-radius: 16px; text-align: center; }\n      h1 { color: #34d399; }\n      button { background: #059669; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }\n    </style>\n  </head>\n  <body>\n    <div class="card">\n      <h1>Salom, PyMaster UZ!</h1>\n      <p>HTML, CSS va JavaScript jonli muhiti</p>\n      <button onclick="alert('Ishladi!')">Bosing</button>\n    </div>\n  </body>\n</html>` },
+    { name: "2. JavaScript hisoblagich", code: `<!DOCTYPE html>\n<html>\n  <body style="font-family:sans-serif;text-align:center;padding:40px">\n    <h2>Hisoblagich: <span id="n">0</span></h2>\n    <button id="btn">+1</button>\n    <script>\n      let n = 0;\n      document.getElementById("btn").addEventListener("click", () => {\n        n++;\n        document.getElementById("n").textContent = n;\n      });\n    <\/script>\n  </body>\n</html>` }
+  ]
+};
+let ideLang = 'python';
+function currentPresets() { return IDE_PRESETS[ideLang]; }
+function setIdeLang(l) {
+  ideLang = l;
+  $('tab-python').classList.toggle('on', l === 'python');
+  $('tab-web').classList.toggle('on', l === 'web');
+  const sel = $('preset');
+  sel.innerHTML = currentPresets().map((p, i) => `<option value="${i}">${esc(p.name)}</option>`).join('');
+  loadPreset(true);
+}
+function loadPreset(force) {
+  const i = Number($('preset').value || 0);
+  const code = currentPresets()[i].code;
+  if (force || $('ide-code').dataset.preset !== String(i)) {
+    $('ide-code').value = code;
+    $('ide-code').dataset.preset = String(i);
+    if (force) { $('ide-out').hidden = false; $('ide-frame').hidden = true; $('ide-out').textContent = 'Kodni ishga tushiring...'; }
+  }
+}
+function runIde() {
+  const code = $('ide-code').value;
+  if (ideLang === 'web') {
+    $('ide-out').hidden = true;
+    $('ide-frame').hidden = false;
+    $('ide-frame').srcdoc = code;
+  } else {
+    execCode('python', code, 'ide-out', null);
+  }
+}
+
+function projectsView() {
+  return `
+  <div class="container">
+    <div class="section-title">
+      <h1 style="font-size:clamp(26px,3.5vw,36px)">🛠 Amaliy loyihalar</h1>
+      <p class="muted">Python, HTML va JavaScript bilimingizni real loyihalar ustida mustahkamlang. Loyiha topshirilganda +150 XP.</p>
+    </div>
+    <div class="grid">
+      ${PROJECTS.map(p => {
+        const done = state.projects.includes(p.id);
+        const dc = p.difficulty === 'Oson' ? 'diff-Oson' : (p.difficulty === "O'rta" ? 'diff-O' : 'diff-Q');
+        return `
+        <div class="card click proj" onclick="location.hash='#projects/${p.id}'">
+          <div class="row" style="justify-content:space-between">
+            <span class="badge ${dc}">${esc(p.difficulty)}</span>
+            ${done ? '<span class="badge">✓ Bajarilgan</span>' : ''}
+          </div>
+          <h3>${esc(p.title)}</h3>
+          <p class="muted" style="font-size:14px">${esc(p.description)}</p>
+          <div class="proj-foot"><span>${esc(p.category)}</span><span>Boshlash →</span></div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+function projectView(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return notFound();
+  const done = state.projects.includes(p.id);
+  const runLang = p.lang;
+  const isWeb = runLang === 'html';
+  return `
+  <div class="container narrow">
+    <a class="back" href="#projects">← Loyihalarga qaytish</a>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:18px">
+        <div>
+          <div class="row" style="gap:8px;margin-bottom:6px">
+            <span class="badge ${p.difficulty === 'Oson' ? 'diff-Oson' : (p.difficulty === "O'rta" ? 'diff-O' : 'diff-Q')}">${esc(p.difficulty)}</span>
+            <span class="muted" style="font-size:13px">· ${esc(p.category)}</span>
+          </div>
+          <h1 style="font-size:24px;margin:0">${esc(p.title)}</h1>
+        </div>
+        ${done ? '<span class="badge">✓ Bajarilgan</span>' : ''}
+      </div>
+
+      <p>${esc(p.description)}</p>
+
+      <h3 class="sec">Asosiy talablar</h3>
+      <ul class="checklist">${p.objectives.map(o => `<li>${esc(o)}</li>`).join('')}</ul>
+
+      <h3 class="sec">Bajarish bosqichlari</h3>
+      <div class="steps">${p.steps.map(s => `<div>${esc(s)}</div>`).join('')}</div>
+
+      <h3 class="sec">Kod</h3>
+      <textarea id="p-code" class="editor" spellcheck="false">${esc(p.starterCode)}</textarea>
+      <div class="btn-row">
+        <button class="btn" onclick="runExercise('${runLang}','p-code','p-out','p-frame')">▶ Ishga tushirish</button>
+        <button class="btn ghost" onclick="$('p-code').value=PROJECTS.find(x=>x.id==='${p.id}').starterCode">↺ Boshlang'ich kod</button>
+        <button class="btn ghost" onclick="$('p-code').value=PROJECTS.find(x=>x.id==='${p.id}').solutionCode">👀 Tayyor yechim</button>
+        <button class="btn ghost" onclick="copyText($('p-code').value)">📋 Nusxalash</button>
+      </div>
+      <div class="output-wrap">
+        <p class="out-title">Natija</p>
+        <pre id="p-out" class="output" ${isWeb ? 'hidden' : ''}>Kodni ishga tushiring...</pre>
+        <iframe id="p-frame" class="preview" sandbox="allow-scripts" ${isWeb ? '' : 'hidden'}></iframe>
+      </div>
+
+      <div class="row" style="justify-content:space-between;margin-top:26px;padding-top:20px;border-top:1px solid var(--border)">
+        <a class="btn ghost" href="#projects">Orqaga</a>
+        <button class="btn" ${done ? 'disabled' : ''} onclick="finishProject('${p.id}')">
+          ${done ? '✓ Topshirilgan' : '✓ Loyihani topshirish (+150 XP)'}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function ustozView() {
+  const faqs = [
+    ["Python nima va nega uni o'rganish kerak?", "Python sodda va o'qish oson sintaksisga ega. Veb-sayt yaratish, ma'lumotlar tahlili, sun'iy intellekt va avtomatlashtirish sohalarida keng ishlatiladi."],
+    ["Dasturlashni noldan boshlasam bo'ladimi?", "Ha, albatta. 1-modul hech qanday oldindan bilimni talab qilmaydi. Darslarni ketma-ket bajaring."],
+    ["Kompyuterimga Python o'rnatish shartmi?", "Yo'q. Saytdagi Jonli IDE orqali Python kodini to'g'ridan-to'g'ri brauzerda yozib, ishga tushirishingiz mumkin."],
+    ["XP nima va qanday olinadi?", "XP — tajriba ballari. Har bir darsni yakunlaganingizda +50 XP, har bir amaliy loyihani topshirganingizda +150 XP olasiz. Har 500 XP uchun yangi daraja ochiladi."],
+    ["Mening natijalarim qayerda saqlanadi?", "Ma'lumotlar faqat sizning brauzeringizda saqlanadi. Boshqa qurilma yoki brauzerda natijalar ko'rinmaydi."],
+    ["Kodim xato chiqsa nima qilaman?", "Xato matnini diqqat bilan o'qing, qaysi qatorda xato borligini aniqlang, print() bilan o'zgaruvchilar qiymatini tekshiring. Qiynalsangiz, «Maslahat» yoki «Yechimni ko'rish» tugmasidan foydalaning."],
+    ["Qaysi modulni birinchi o'rganish kerak?", "Ketma-ketlikda: 1-Modul (Python) → 2-Modul (HTML) → 3-Modul (CSS) → 4-Modul (JavaScript). Har bir keyingi modul oldingisiga tayanadi."]
+  ];
+  return `
+  <div class="narrow">
+    <div class="section-title">
+      <h1 style="font-size:clamp(26px,3.5vw,36px)">✨ Ko'p so'raladigan savollar</h1>
+      <p class="muted">Boshlang'ichlar uchun eng ko'p beriladigan savollar va javoblar.</p>
+    </div>
+    ${faqs.map((f, i) => `
+      <details class="faq" ${i === 0 ? 'open' : ''}>
+        <summary>${esc(f[0])}</summary>
+        <p>${esc(f[1])}</p>
+      </details>`).join('')}
+  </div>`;
+}
+
+function profileView() {
+  const u = state.user || { firstName: 'Mehmon', lastName: '' };
+  const lvl = levelOf(state.xp);
+  const nextXp = lvl * 500;
+  const lpct = Math.round((state.xp - (lvl - 1) * 500) / 500 * 100);
+  const total = totalLessons();
+  return `
+  <div class="container narrow">
+    <div class="page-head"><h1>👤 Mening profilim</h1></div>
+    <div class="card" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:22px">
+      <div class="avatar">${esc((u.firstName || '?')[0].toUpperCase())}</div>
+      <div style="flex:1;min-width:200px">
+        <h2 style="margin:0;font-size:22px">${esc(u.firstName)} ${esc(u.lastName)}</h2>
+        <div class="muted" style="font-size:14px">Daraja ${lvl} · keyingi darajagacha ${nextXp - state.xp} XP</div>
+        <div class="progress"><span style="width:${lpct}%"></span></div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:22px">
+      <div class="card stat-box"><b>${state.xp}</b><span class="muted">XP</span></div>
+      <div class="card stat-box"><b>${state.lessons.length}<small style="font-size:16px;color:var(--muted)"> / ${total}</small></b><span class="muted">Tugatilgan darslar</span></div>
+      <div class="card stat-box"><b>${state.projects.length}<small style="font-size:16px;color:var(--muted)"> / ${PROJECTS.length}</small></b><span class="muted">Loyihalar</span></div>
+    </div>
+    <div class="card">
+      <h3>Ism-familiyani o'zgartirish</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+        <input id="pf-first" class="text" value="${esc(u.firstName)}" placeholder="Ism">
+        <input id="pf-last" class="text" value="${esc(u.lastName)}" placeholder="Familiya">
+      </div>
+      <div class="btn-row" style="justify-content:space-between">
+        <button class="btn sm" onclick="saveProfile()">Saqlash</button>
+        <button class="btn sm ghost" style="color:#b91c1c" onclick="resetAll()">Barcha ma'lumotlarni tozalash</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function notFound() {
+  return `<div class="narrow card" style="text-align:center"><h2>Sahifa topilmadi</h2><a class="btn" href="#home">Bosh sahifaga</a></div>`;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+function runExercise(lang, codeId = 'ex-code', outId = 'ex-out', frameId = 'ex-frame') {
+  execCode(lang, $(codeId).value, outId, frameId);
+}
+
+function completeLesson(modId, idx) {
+  const mod = MODULES.find(m => m.id === modId);
+  const les = mod.lessons[idx];
+  if (state.lessons.includes(les.id)) return;
+  state.lessons.push(les.id);
+  state.xp += 50;
+  persist();
+  const btn = $('done-btn');
+  btn.disabled = true;
+  btn.textContent = '✓ Tugatilgan';
+  toast("Tabriklaymiz! Dars tugatildi va +50 XP qo'shildi");
+}
+
+function finishProject(id) {
+  if (state.projects.includes(id)) return;
+  const p = PROJECTS.find(x => x.id === id);
+  state.projects.push(id);
+  state.xp += 150;
+  persist();
+  toast(`Tabriklaymiz! "${p.title}" loyihasi topshirildi (+150 XP)`);
+  render();
+}
+
+function checkQuiz(modId) {
+  const mod = MODULES.find(m => m.id === modId);
+  let score = 0;
+  mod.quiz.forEach((q, qi) => {
+    const chosen = document.querySelector(`input[name="q${qi}"]:checked`);
+    const box = $(`qr-${qi}`);
+    const ok = chosen && Number(chosen.value) === q.correctIndex;
+    if (ok) score++;
+    box.innerHTML = ok
+      ? `<span class="q-ok">✓ To'g'ri!</span> ${esc(q.explanation)}`
+      : `<span class="q-bad">✗ Noto'g'ri.</span> To'g'ri javob: <b>${esc(q.options[q.correctIndex])}</b>. ${esc(q.explanation)}`;
+  });
+  toast(`Natija: ${score} / ${mod.quiz.length}`);
+}
+
+function saveProfile() {
+  const f = $('pf-first').value.trim(), l = $('pf-last').value.trim();
+  if (!f) { toast('Ismni kiriting'); return; }
+  state.user = { firstName: f, lastName: l };
+  persist();
+  toast('Ma\'lumotlar saqlandi');
+  render();
+}
+
+function resetAll() {
+  if (!confirm("Barcha ma'lumotlar (XP, darslar, loyihalar) o'chiriladi. Davom etasizmi?")) return;
+  state.user = null; state.xp = 0; state.lessons = []; state.projects = [];
+  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+  persist();
+  render();
+  showRegister();
+}
+
+function showRegister() {
+  $('modal-root').innerHTML = `
+  <div class="overlay">
+    <form class="modal" onsubmit="event.preventDefault();registerUser(this)">
+      <div style="text-align:center;margin-bottom:18px">
+        <div class="ico-c">🐍</div>
+        <h2 style="font-size:22px;margin-bottom:6px">PyMaster UZ ga xush kelibsiz!</h2>
+        <p class="muted" style="font-size:14px;margin:0">O'qishni boshlash uchun ism va familiyangizni kiriting.</p>
+      </div>
+      <label class="label">Ism</label>
+      <input name="first" class="text" required placeholder="Masalan: Aziz" autocomplete="given-name">
+      <label class="label">Familiya</label>
+      <input name="last" class="text" required placeholder="Masalan: Karimov" autocomplete="family-name">
+      <button class="btn" style="width:100%;justify-content:center;margin-top:22px" type="submit">Boshlash</button>
+    </form>
+  </div>`;
+}
+function registerUser(form) {
+  const f = form.first.value.trim(), l = form.last.value.trim();
+  if (!f || !l) return;
+  state.user = { firstName: f, lastName: l };
+  persist();
+  $('modal-root').innerHTML = '';
+  render();
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+function render() {
+  const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  const view = parts[0] || 'home';
+  document.querySelectorAll('nav.menu a').forEach(a => {
+    a.classList.toggle('active', a.dataset.nav === view);
+  });
+
+  let html = '';
+  switch (view) {
+    case 'home': html = homeView(); break;
+    case 'courses':
+      if (!parts[1]) html = coursesView();
+      else if (parts[2] === 'quiz') html = quizView(parts[1]);
+      else if (parts[2] !== undefined) html = lessonView(parts[1], Number(parts[2]));
+      else html = moduleView(parts[1]);
+      break;
+    case 'ide': html = ideView(); break;
+    case 'projects': html = parts[1] ? projectView(parts[1]) : projectsView(); break;
+    case 'ustoz': html = ustozView(); break;
+    case 'profile': html = profileView(); break;
+    default: html = homeView();
+  }
+  $('main').innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+  if (view === 'ide') { setIdeLang('python'); }
+  $('xp-val').textContent = state.xp;
+}
+
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', () => {
+  persist();
+  render();
+  if (!state.user) showRegister();
+});
+</script>
+</body>
+</html>
